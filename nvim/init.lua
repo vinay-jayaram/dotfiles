@@ -2,17 +2,17 @@
 -- Author: Niru Maheswaranathan
 -- Website: https://github.com/nirum/dotfiles
 
-local status_ok, _ = pcall(require, "impatient")
-if not status_ok then
-    print("Impatient not installed!")
-end
-
+require("vars")
+require("core.plugins")
+require("impatient")
 require("core.options")
 require("core.mappings")
-require("core.plugins")
 require("core.colorscheme")
-require("core.gitsigns")
+require("core.cmp")
+require("core.lsp")
+require("core.statusline")
 require("core.telescope")
 require("core.treesitter")
-require("core.lsp")
-require("core.cmp")
+vim.notify = require("notify")
+-- not sure why this is necessary?/
+require('nvim-surround').setup()

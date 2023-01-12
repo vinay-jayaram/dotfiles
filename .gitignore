@@ -7,3 +7,10 @@ tags
 .mypy_cache
 *.bak
 *.DS_Store
+nvim/lua/core/options.lua~
+nvim/lua/core/mappings.lua~
+nvim/lua/core/statusline.lua
+nvim/lua/core/lsp/settings
+nvim/lua/core/lsp
+nvim/lua/dbg
+nvim/init.lua.prev

@@ -5,9 +5,10 @@
 local options = {
   termguicolors = true,       -- User 24 bit color in the terminal.
   relativenumber = true,      -- Use relative line numbers.
+  autochdir = true,           -- automatically change cwd to buffer dir
   number = true,              -- Show the absolute number of the current line.
   clipboard = "unnamedplus",  -- Use system clipboard.
-  gdefault = true,            -- Turn on global ("g" flag) for substitutions (:s//g).
+  gdefault = false,            -- Turn on global ("g" flag) for substitutions (:s//g).
   ignorecase = true,          -- Ignores case in search patterns.
   smartcase = true,           -- Override the ignorecase option if the search contains uppercase letters.
   splitright = true,          -- Position horizontal splits to the right.

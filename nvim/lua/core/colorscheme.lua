@@ -1,9 +1,4 @@
-local status_ok, tokyonight = pcall(require, "tokyonight")
-if not status_ok then
-  return
-end
-
-tokyonight.setup({
+require("tokyonight").setup({
 	style = "night",
 	styles = {
 		comments = "italic",
@@ -13,15 +8,5 @@ tokyonight.setup({
 	},
   lualine_bold = true,
 })
+vim.cmd([[set notermguicolors]])
 vim.cmd([[colorscheme tokyonight-night]])
-
-local status_ok, lualine = pcall(require, "lualine")
-if not status_ok then
-  return
-end
-
-lualine.setup({
-	options = {
-		theme = "tokyonight",
-	},
-})

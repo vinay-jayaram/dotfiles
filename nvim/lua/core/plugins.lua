@@ -2,114 +2,115 @@
 -- Author: Niru Maheswaranathan
 -- Website: https://github.com/nirum/dotfiles
 
--- Install packer
-local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
-local is_bootstrap = false
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  is_bootstrap = true
-  vim.fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-  vim.cmd [[packadd packer.nvim]]
-end
-
-packer = require("packer")
+-- Use a protected call in case packer is not installed.
+local packer = require("packer")
+--if not status_ok then
+--	return
+--end
 
 -- Have packer use a popup window
 packer.init({
-  display = {
-    open_fn = function()
-      return require("packer.util").float({ border = "rounded" })
-    end,
-  },
-})
+	display = {
+		open_fn = function()
+			return require("packer.util").float({ border = "rounded" })
+		end,
+	},
+ })
 
 packer.startup({
-  function(use)
+	function(use)
+		use("lewis6991/impatient.nvim") -- speeds up neovim startup time.
 
-    use("wbthomason/packer.nvim") -- Package manager.
-    use("lewis6991/impatient.nvim") -- Speeds up neovim startup time.
+		use("wbthomason/packer.nvim") -- Have packer manage itself.
+		use("nvim-lua/popup.nvim") -- An implementation of the Popup API in neovim.
+		use("nvim-lua/plenary.nvim") -- Useful lua functions used by lots of plugins.
 
-    use { -- LSP Configuration & Plugins.
-      "neovim/nvim-lspconfig",
-      requires = {
-        -- Automatically install LSPs to stdpath for neovim.
-        "williamboman/mason.nvim",
-        "williamboman/mason-lspconfig.nvim",
+		use({
+			"nvim-treesitter/nvim-treesitter", -- treesitter support
+			run = ":TSUpdate",
+		})
 
-        -- Useful status updates for LSP.
-        "j-hui/fidget.nvim",
+		use({
+			"lukas-reineke/indent-blankline.nvim",
+			config = function()
+				require("indent_blankline").setup()
+			end,
+		})
 
-        -- Symbols for LSP.
-        "onsails/lspkind-nvim"
-      }
-    }
+		use("hrsh7th/nvim-cmp") -- Completion Engine
+		use("hrsh7th/cmp-path") -- [cmp] path source
+		use("hrsh7th/cmp-buffer") -- [cmp] buffer source
+		use("hrsh7th/cmp-cmdline") -- [cmp] cmdline source?
+		--		use("saadparwaiz1/cmp_luasnip") -- snippet completions
 
-    use { -- Autocompletion.
-      "hrsh7th/nvim-cmp",
-      requires = {
-        -- Other completion sources
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-path",
-        "hrsh7th/cmp-buffer",
+		use("hrsh7th/cmp-nvim-lsp") -- [cmp] LSP source
+		use("hrsh7th/cmp-nvim-lua") -- [cmp] neovim-lua completions
+		use("onsails/lspkind-nvim") -- adds symbols to LSP completion
 
-        -- Snippets
-        "L3MON4D3/LuaSnip",
-        "saadparwaiz1/cmp_luasnip",
-      }
-    }
+		use("neovim/nvim-lspconfig") -- LSP
+		use("williamboman/nvim-lsp-installer") -- simple to use language server installer
 
-    use { -- Highlight, edit, and navigate code
-      'nvim-treesitter/nvim-treesitter',
-      run = function()
-        pcall(require('nvim-treesitter.install').update { with_sync = true })
-      end,
-    }
+		use("nvim-telescope/telescope.nvim") -- Fuzzy Finding
+		--		use("nvim-telescope/telescope-dap.nvim")
+		use("sbdchd/neoformat") -- yapf formatting
 
-    use { -- Additional text objects via treesitter
-      'nvim-treesitter/nvim-treesitter-textobjects',
-      after = 'nvim-treesitter',
-    }
+		use({
+			"dccsillag/magma-nvim", -- connects to jupyter/python kernels
+			run = ":UpdateRemotePlugins",
+		})
+		use("rcarriga/nvim-notify")
 
-    use { -- Telescope
-      "nvim-telescope/telescope.nvim",
-      requires = {
-        "nvim-lua/plenary.nvim",
-      },
-    }
---use("nvim-lua/popup.nvim") -- An implementation of the Popup API in neovim.
---use("") -- Useful lua functions used by lots of plugins.
---		use("rcarriga/nvim-notify")
-    use("sbdchd/neoformat") -- yapf formatting
-    use("folke/tokyonight.nvim") -- Colorscheme.
-    use({ -- Statusline.
-      "nvim-lualine/lualine.nvim",
-      requires = { "kyazdani42/nvim-web-devicons", opt = true },
-    })
-    use({ -- 'gc' to comment regions/lines.
-      "numToStr/Comment.nvim",
-      config = function()
-        require("Comment").setup()
-      end,
-    })
-    use({ -- Adds indent guidelines.
-      "lukas-reineke/indent-blankline.nvim",
-      config = function()
-        require("indent_blankline").setup()
-      end,
-    })
-    use("lewis6991/gitsigns.nvim") -- Git sign column.
-    use("tpope/vim-sleuth") -- Detect tabstop and shiftwidth automatically.
+		use("folke/tokyonight.nvim") -- colorscheme
 
-    if is_bootstrap then
-      packer.sync()
+		use({
+			"numToStr/Comment.nvim", -- commenting plugin
+			config = function()
+				require("Comment").setup()
+			end,
+		})
+    use({
+    "kylechui/nvim-surround",
+    tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+    config = function()
+        require("nvim-surround").setup()
     end
-  end,
+    })
+    use('nvim-treesitter/nvim-treesitter')
+    use({'nvim-orgmode/orgmode', config = function()
+      require('orgmode').setup({})
+    end
+    })
+		use({
+			"lewis6991/gitsigns.nvim", -- git signs
+			config = function()
+				require("gitsigns").setup()
+			end,
+		})
+
+    use({"voldikss/vim-floaterm",
+    config = function()
+    require("vim-floaterm").setup()
+      end
+    }) -- floatterm for lazygit
+
+		use({
+			"nvim-lualine/lualine.nvim",
+			requires = { "kyazdani42/nvim-web-devicons", opt = true },
+		})
+
+		use({
+			"akinsho/toggleterm.nvim",
+			tag = "v2.*",
+			config = function()
+				require("toggleterm").setup({
+          size = 20,
+          open_mapping = [[<c-t>]],
+        })
+			end,
+		})
+	end,
+config = {
+  package_root = vim.fn.stdpath('config') .. '/site/pack'
+}
 })
 
-if is_bootstrap then
-  print '=================================='
-  print '    Plugins are being installed'
-  print '    Wait until Packer completes,'
-  print '       then restart nvim'
-  print '=================================='
-  return
-end
