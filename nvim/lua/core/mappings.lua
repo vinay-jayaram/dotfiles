@@ -40,6 +40,9 @@ vim.cmd([[
   let g:neoformat_only_msg_on_error = 0
 ]])
 
+-- LSP 
+vim.keymap.set("n", "?", vim.diagnostic.open_float, opts)
+
 -- Telescope
 keymap(
 	"n",
