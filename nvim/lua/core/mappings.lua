@@ -33,9 +33,9 @@ keymap("x", "K", ":move '<-2<CR>gv-gv", opts)
 -- Format (Neoformat)
 keymap("n", "<leader>f", ":Neoformat <CR>", opts)
 vim.cmd([[
-  let g:neoformat_python_ufmt = {'exe': 'ufmt', 'args': ['format'], 'replace': 1}
+  let g:neoformat_python_pyfmt = {'exe': 'pyfmt', 'args': ['format'], 'replace': 1}
   let g:neoformat_python_tidy = {'exe': 'tidy-imports', 'args': ['--black', '--quiet', '--replace-star-imports', '--action REPLACE'], 'replace': 1}
-  let g:neoformat_enabled_python = ['tidy', 'ufmt']
+  let g:neoformat_enabled_python = ['tidy', 'pyfmt']
   let g:neoformat_run_all_formatters = 1
   let g:neoformat_only_msg_on_error = 0
 ]])
@@ -47,15 +47,23 @@ vim.keymap.set("n", "?", vim.diagnostic.open_float, opts)
 keymap(
 	"n",
 	"f",
-	"<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = false }))<cr>",
+  "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown({ previewer = false }))<cr>",
 	opts
 )
-keymap("n", "s", "<cmd>Telescope live_grep<cr>", opts)
+keymap("n", "s", "<cmd>Telescope live_grep<cr>", opts) --Searches in current directory
+keymap("n", "<leader>ss", "<cmd>lua require('telescope.builtin').live_grep({cwd=os.getenv('HOME')..'/work/src2/platform/'})<cr>", opts) -- search in src2
+keymap("n", "<leader>b", "<cmd>lua require('telescope.builtin').buffers()<cr>", opts) -- search buffers
+keymap("n", "<leader>sf", "<cmd>lua require('telescope.builtin').find_files({cwd=os.getenv('HOME')..'/work/src2/platform/'})<cr>", opts) -- search buffers
 
 keymap(
   "n",
   "<leader>tg",
   "<cmd>:FloatermNew --cwd=./ lazygit<cr>", opts
+)
+keymap(
+  "n",
+  "<leader>tt",
+  "<cmd>:FloatermNew pytest -v %:p<cr>", opts
 )
 keymap(
   "n",
