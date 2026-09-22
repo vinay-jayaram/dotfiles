@@ -4,7 +4,15 @@ if not status_ok then
 end
 
 configs.setup {
-  ensure_installed = "all", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  -- Was "all", which compiles 200+ grammars on first start and takes tens of
+  -- minutes. Explicit list instead; add languages as you need them.
+  ensure_installed = {
+    "python", "lua", "c", "cpp", "rust", "go",
+    "bash", "json", "yaml", "toml", "markdown", "markdown_inline",
+    "html", "css", "javascript", "typescript", "tsx",
+    "git_config", "gitcommit", "gitignore", "diff",
+    "query", "vim", "vimdoc", "regex", "sql", "dockerfile",
+  },
   sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
   ignore_install = { "phpdoc" }, -- List of parsers to ignore installing
   highlight = {

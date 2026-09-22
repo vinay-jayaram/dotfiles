@@ -19,21 +19,25 @@ packer.init({
 
 packer.startup({
 	function(use)
-		use("lewis6991/impatient.nvim") -- speeds up neovim startup time.
+		-- impatient.nvim used to live here; Nvim 0.9+ ships the same module
+		-- cache as vim.loader, enabled in init.lua.
 
 		use("wbthomason/packer.nvim") -- Have packer manage itself.
 		use("nvim-lua/popup.nvim") -- An implementation of the Popup API in neovim.
 		use("nvim-lua/plenary.nvim") -- Useful lua functions used by lots of plugins.
 
+		-- Pinned to master: the default `main` branch drops :TSUpdate and the
+		-- nvim-treesitter.configs module that core/treesitter.lua sets up.
 		use({
 			"nvim-treesitter/nvim-treesitter", -- treesitter support
+			branch = "master",
 			run = ":TSUpdate",
 		})
 
 		use({
 			"lukas-reineke/indent-blankline.nvim",
 			config = function()
-				require("indent_blankline").setup()
+				require("ibl").setup()
 			end,
 		})
 
@@ -48,16 +52,13 @@ packer.startup({
 		use("onsails/lspkind-nvim") -- adds symbols to LSP completion
 
 		use("neovim/nvim-lspconfig") -- LSP
-		use("williamboman/nvim-lsp-installer") -- simple to use language server installer
+		-- nvim-lsp-installer was here; upstream is archived (superseded by
+		-- mason.nvim). core/lsp.lua enables servers already on PATH instead.
 
 		use("nvim-telescope/telescope.nvim") -- Fuzzy Finding
 		--		use("nvim-telescope/telescope-dap.nvim")
 		use("sbdchd/neoformat") -- yapf formatting
 
-		use({
-			"dccsillag/magma-nvim", -- connects to jupyter/python kernels
-			run = ":UpdateRemotePlugins",
-		})
 		use("rcarriga/nvim-notify")
 
 		use("folke/tokyonight.nvim") -- colorscheme
@@ -75,7 +76,6 @@ packer.startup({
         require("nvim-surround").setup()
     end
     })
-    use('nvim-treesitter/nvim-treesitter')
     use({'nvim-orgmode/orgmode', config = function()
       require('orgmode').setup({})
     end
@@ -87,11 +87,23 @@ packer.startup({
 			end,
 		})
 
-    use({"voldikss/vim-floaterm",
-    config = function()
-    require("vim-floaterm").setup()
-      end
-    }) -- floatterm for lazygit
+    -- Vimscript plugin, configured through g:floaterm_* vars -- there is no
+    -- lua module to require, so no config function here.
+    use("voldikss/vim-floaterm") -- floatterm for lazygit
+
+		use("coder/claudecode.nvim") -- Claude Code in Neovim
+
+		-- Jupyter notebooks (.ipynb) edited natively. The Rust backend is not
+		-- shipped in the repo; packer's run hook fetches the prebuilt binary
+		-- (verified against the release SHA256SUMS), falling back to cargo.
+		use({
+			"sheng-tse/jupynvim",
+			run = function()
+				require("jupynvim.backend.install").run({
+					dir = vim.fn.stdpath("config") .. "/site/pack/packer/start/jupynvim",
+				})
+			end,
+		})
 
 		use({
 			"nvim-lualine/lualine.nvim",

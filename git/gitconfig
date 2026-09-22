@@ -1,6 +1,6 @@
 [user]
-  name=Niru Maheswaranathan
-  email=niru@hey.com
+  name=Vinay
+  email=vinayjayaram13@gmail.com
 
 [alias]
   cm=commit
@@ -11,8 +11,8 @@
   words=diff --word-diff
   recent=for-each-ref --count=10 --sort=-committerdate refs/heads/ --format="%(refname:short)"
   overview=log --all --since='2 weeks' --oneline --no-merges
-  recap=log --all --oneline --no-merges --author=nirum@stanford.edu
-  today=log --since=00:00:00 --all --no-merges --oneline --author=nirum@stanford.edu
+  recap=log --all --oneline --no-merges --author=vinayjayaram13@gmail.com
+  today=log --since=00:00:00 --all --no-merges --oneline --author=vinayjayaram13@gmail.com
   graph=log --graph --all --decorate --stat --date=iso
 
 [diff]

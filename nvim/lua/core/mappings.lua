@@ -51,9 +51,7 @@ keymap(
 	opts
 )
 keymap("n", "s", "<cmd>Telescope live_grep<cr>", opts) --Searches in current directory
-keymap("n", "<leader>ss", "<cmd>lua require('telescope.builtin').live_grep({cwd=os.getenv('HOME')..'/work/src2/platform/'})<cr>", opts) -- search in src2
 keymap("n", "<leader>b", "<cmd>lua require('telescope.builtin').buffers()<cr>", opts) -- search buffers
-keymap("n", "<leader>sf", "<cmd>lua require('telescope.builtin').find_files({cwd=os.getenv('HOME')..'/work/src2/platform/'})<cr>", opts) -- search buffers
 
 keymap(
   "n",
@@ -76,24 +74,33 @@ keymap(
   "<cmd>:FloatermShow <cr>", opts
 )
 
+-- Claude Code
+keymap("n", "<leader>ac", "<cmd>ClaudeCode<cr>", opts) -- toggle
+keymap("n", "<leader>af", "<cmd>ClaudeCodeFocus<cr>", opts)
+keymap("n", "<leader>ar", "<cmd>ClaudeCode --resume<cr>", opts)
+keymap("n", "<leader>aC", "<cmd>ClaudeCode --continue<cr>", opts)
+keymap("n", "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", opts)
+keymap("n", "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", opts) -- add current buffer
+keymap("v", "<leader>as", "<cmd>ClaudeCodeSend<cr>", opts) -- send selection
+keymap("n", "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", opts)
+keymap("n", "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", opts)
+keymap("n", "<leader>aS", "<cmd>ClaudeCodeStatus<cr>", opts)
+
+-- ClaudeCodeSendText takes its text as an argument, so prompt for it.
+vim.keymap.set("n", "<leader>at", function()
+	vim.ui.input({ prompt = "Send to Claude: " }, function(text)
+		if text and text ~= "" then
+			vim.cmd("ClaudeCodeSendText " .. text)
+		end
+	end)
+end, { desc = "Send text to Claude", silent = true })
 
 
--- Magma
+
+-- Window navigation (Mac specific b/c how inserted chars work: Opt-h/j/k/l)
 vim.cmd([[
-  " nnoremap <silent><expr> <LocalLeader>r  :MagmaEvaluateOperator<CR>
-  nnoremap <silent> <leader><Enter> :MagmaEvaluateLine<CR>
-  xnoremap <silent> <leader>r  :<C-u>MagmaEvaluateVisual<CR>
-  nnoremap <silent> <leader>rc :MagmaReevaluateCell<CR>
-  nnoremap <silent> <leader>rd :MagmaDelete<CR>
-  nnoremap <silent> <leader>o :MagmaShowOutput<CR>
-  nnoremap <silent> <leader>i :MagmaInit python3<CR>
-
-  " moving between different keymaps (note this is Mac specific b/c how inserted chars work)
   nnoremap ˙ <C-W>h
   nnoremap ∆ <C-W>j
   nnoremap ˚ <C-W>k
   nnoremap ¬ <C-W>l
-
-  let g:magma_automatically_open_output = v:false
-  let g:magma_image_provider = "kitty"
 ]])
