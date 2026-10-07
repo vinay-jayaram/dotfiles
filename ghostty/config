@@ -1,0 +1,27 @@
+# Ghostty config. Reload in place with cmd+shift+, — no restart needed.
+# Full reference: `ghostty +show-config --default --docs`, or `man 5 ghostty`.
+
+# Matches the tokyonight-night colorscheme in ~/.config/nvim/init.lua.
+theme = TokyoNight Night
+
+font-size = 13
+
+# Why this terminal: Ghostty 1.3+ implements the Kitty graphics protocol with
+# Unicode placeholders, which is what jupynvim needs to draw plots from .ipynb
+# cells as real PNGs. Apple Terminal has no graphics protocol at all, so figures
+# were unreachable there. Nothing below is required for that — it works by
+# default — these are just quality-of-life settings.
+
+# Let nvim and the shell know the window regained focus, so `autoread` picks up
+# files changed outside the editor.
+focus-follows-mouse = false
+
+# macOS: make left alt send Esc+ so readline/nvim meta-bindings work, while
+# keeping right alt free for typing accented characters.
+macos-option-as-alt = left
+
+# Keep a generous scrollback for reading long command output.
+scrollback-limit = 10000000
+
+# Don't prompt when closing a window that has no running process.
+confirm-close-surface = false
