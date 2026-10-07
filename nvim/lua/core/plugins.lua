@@ -86,6 +86,7 @@ packer.startup({
 				require("gitsigns").setup()
 			end,
 		})
+		use({ "sindrets/diffview.nvim", requires = "nvim-lua/plenary.nvim" }) -- branch and file-history diffs
 
     -- Vimscript plugin, configured through g:floaterm_* vars -- there is no
     -- lua module to require, so no config function here.
